@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phiếu Thông Tin Ứng Viên - Viking</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #1d4ed8;
+      --primary-hover: #1e40af;
+      --success: #166534;
+      --success-bg: #ecfdf5;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
+      color: white;
+      padding: 24px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+    }
+
+    .hero p {
+      margin: 0;
+      opacity: 0.95;
+      font-size: 15px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin: 0 0 16px;
+      font-weight: 700;
+    }
+
+    .section-note {
+      margin: -8px 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label,
+    .label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    }
+
+    .radio-group,
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+    }
+
+    .choice {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+
+    .choice input { margin: 0; }
+
+    .experience-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .experience-item {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+      background: #fcfcfd;
+    }
+
+    .experience-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .experience-head h3 {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-secondary {
+      background: #eef2ff;
+      color: #1e3a8a;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .actions-left,
+    .actions-right {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .alert {
+      display: none;
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .alert.success {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #bbf7d0;
+    }
+
+    .alert.error {
+      display: block;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    iframe[name="submit_iframe"] {
+      width: 0;
+      height: 0;
+      border: 0;
+      position: absolute;
+      left: -9999px;
+    }
+
+    @media (max-width: 760px) {
+      .grid,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 { font-size: 24px; }
+      .card { padding: 18px; }
+      .actions { flex-direction: column; align-items: stretch; }
+      .actions-left,
+      .actions-right { width: 100%; }
+      .actions-left .btn,
+      .actions-right .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>Phiếu Thông Tin Ứng Viên</h1>
+      <p>Vui lòng điền đầy đủ thông tin. Sau khi gửi, bộ phận tuyển dụng sẽ liên hệ để sắp xếp đánh giá tay nghề.</p>
+    </div>
+
+    <div id="alertBox" class="alert"></div>
+
+    <form id="candidateForm" method="POST" target="submit_iframe" novalidate>
+      <input type="hidden" name="ApplyDate" id="ApplyDate" />
+      <input type="hidden" name="MachinesCanUse" id="MachinesCanUse" />
+      <input type="hidden" name="WorkExperienceSummary" id="WorkExperienceSummary" />
+      <input type="hidden" name="SubmittedFrom" value="GitHub Pages Candidate Form" />
+
+      <div class="card">
+        <h2 class="section-title">1. Thông tin chung</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="PositionApplied">Vị trí ứng tuyển <span style="color:#dc2626">*</span></label>
+            <select id="PositionApplied" name="PositionApplied" required>
+              <option value="">-- Chọn vị trí --</option>
+              <option>Công nhân may</option>
+              <option>Cơ điện</option>
+              <option>Đào tạo</option>
+              <option>Chuyền trưởng</option>
+              <option>Kỹ thuật</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="FullName">Họ và tên <span style="color:#dc2626">*</span></label>
+            <input type="text" id="FullName" name="FullName" required placeholder="Nhập họ và tên" />
+          </div>
+
+          <div class="field">
+            <label for="BirthYear">Năm sinh <span style="color:#dc2626">*</span></label>
+            <input type="number" id="BirthYear" name="BirthYear" min="1950" max="2100" required placeholder="Ví dụ: 2001" />
+          </div>
+
+          <div class="field">
+            <label for="Phone">Điện thoại <span style="color:#dc2626">*</span></label>
+            <input type="tel" id="Phone" name="Phone" required placeholder="Ví dụ: 0901234567" />
+          </div>
+
+          <div class="field">
+            <label for="EducationLevel">Trình độ văn hóa</label>
+            <select id="EducationLevel" name="EducationLevel">
+              <option value="">-- Chọn trình độ --</option>
+              <option>9/12</option>
+              <option>10/12</option>
+              <option>11/12</option>
+              <option>12/12</option>
+              <option>Trung cấp</option>
+              <option>Cao đẳng</option>
+              <option>Đại học</option>
+              <option>Khác</option>
+            </select>
+          </div>
+
+          <div class="field" style="grid-column: 1 / -1;">
+            <label for="Address">Địa chỉ</label>
+            <textarea id="Address" name="Address" placeholder="Nhập địa chỉ hiện tại"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">2. Tình trạng cá nhân</h2>
+        <div class="field" style="margin-bottom: 14px;">
+          <div class="label">Tình trạng hôn nhân</div>
+          <div class="radio-group">
+            <label class="choice"><input type="radio" name="MaritalStatus" value="Độc thân" checked /> Độc thân</label>
+            <label class="choice"><input type="radio" name="MaritalStatus" value="Đã có gia đình" /> Đã có gia đình</label>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">Có con nhỏ dưới 3 tuổi?</div>
+          <div class="radio-group">
+            <label class="choice"><input type="radio" name="HasChildUnder3" value="Không" checked /> Không</label>
+            <label class="choice"><input type="radio" name="HasChildUnder3" value="Có" /> Có</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">3. Người giới thiệu</h2>
+        <div class="grid">
+          <div class="field">
+            <label for="ReferrerName">Họ và tên người giới thiệu</label>
+            <input type="text" id="ReferrerName" name="ReferrerName" placeholder="Nhập họ và tên" />
+          </div>
+
+          <div class="field">
+            <label for="ReferrerDepartment">Chuyền / Bộ phận</label>
+            <input type="text" id="ReferrerDepartment" name="ReferrerDepartment" placeholder="Ví dụ: Chuyền A / Kỹ thuật" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">4. Các máy có thể sử dụng</h2>
+        <p class="section-note">Chọn tất cả các máy bạn đã từng sử dụng được.</p>
+        <div class="checkbox-group">
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy 1 kim" /> Máy 1 kim</label>
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy 2 kim" /> Máy 2 kim</label>
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy vắt sổ" /> Máy vắt sổ</label>
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy kansai" /> Máy kansai</label>
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy cuốn sườn" /> Máy cuốn sườn</label>
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy lăn" /> Máy lăn</label>
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy khuy / bọ / nút" /> Máy khuy / bọ / nút</label>
+          <label class="choice"><input type="checkbox" class="machine-option" value="Máy dập / ép" /> Máy dập / ép</label>
+        </div>
+
+        <div class="field" style="margin-top: 14px;">
+          <label for="OtherMachine">Máy khác</label>
+          <input type="text" id="OtherMachine" placeholder="Nếu có, hãy nhập thêm" />
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="experience-head">
+          <div>
+            <h2 class="section-title" style="margin:0;">5. Kinh nghiệm làm việc</h2>
+            <div class="section-note" style="margin: 6px 0 0;">Bạn có thể thêm nhiều dòng kinh nghiệm nếu cần.</div>
+          </div>
+          <button type="button" class="btn btn-secondary" id="addExperienceBtn">+ Thêm kinh nghiệm</button>
+        </div>
+
+        <div id="experienceList" class="experience-list"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">6. Xác nhận và gửi</h2>
+        <div class="field">
+          <label for="Notes">Ghi chú thêm</label>
+          <textarea id="Notes" name="Notes" placeholder="Thông tin bổ sung nếu có"></textarea>
+        </div>
+        <p class="hint">Bạn nhớ kiểm tra lại số điện thoại và vị trí ứng tuyển trước khi gửi.</p>
+      </div>
+
+      <div class="actions">
+        <div class="actions-left">
+          <button type="button" class="btn btn-secondary" id="saveDraftBtn">Lưu tạm trên máy này</button>
+          <button type="button" class="btn btn-danger" id="clearDraftBtn">Xóa bản lưu tạm</button>
+        </div>
+        <div class="actions-right">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Gửi hồ sơ</button>
+        </div>
+      </div>
+    </form>
+
+    <iframe name="submit_iframe" id="submit_iframe"></iframe>
+
+    <div class="footer-note">
+      Form này có thể đưa trực tiếp lên GitHub Pages. Bạn chỉ cần thay URL Apps Script trong phần cấu hình JavaScript.
+    </div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      APPS_SCRIPT_URL: 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE',
+      DRAFT_KEY: 'viking_candidate_form_draft_v1'
+    };
+
+    const form = document.getElementById('candidateForm');
+    const alertBox = document.getElementById('alertBox');
+    const submitBtn = document.getElementById('submitBtn');
+    const iframe = document.getElementById('submit_iframe');
+    const experienceList = document.getElementById('experienceList');
+    let waitingForSubmit = false;
+
+    function showAlert(type, message) {
+      alertBox.className = 'alert ' + type;
+      alertBox.textContent = message;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function hideAlert() {
+      alertBox.className = 'alert';
+      alertBox.textContent = '';
+    }
+
+    function todayString() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function createExperienceItem(data = {}) {
+      const index = experienceList.children.length + 1;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'experience-item';
+      wrapper.innerHTML = `
+        <div class="experience-head">
+          <h3>Kinh nghiệm #${index}</h3>
+          <button type="button" class="btn btn-danger remove-exp-btn">Xóa</button>
+        </div>
+        <div class="grid-3">
+          <div class="field">
+            <label>Từ năm</label>
+            <input type="number" class="exp-from" min="1950" max="2100" value="${data.fromYear || ''}" placeholder="Ví dụ: 2020" />
+          </div>
+          <div class="field">
+            <label>Đến năm</label>
+            <input type="number" class="exp-to" min="1950" max="2100" value="${data.toYear || ''}" placeholder="Ví dụ: 2024" />
+          </div>
+          <div class="field">
+            <label>Nơi làm việc / Tỉnh thành</label>
+            <input type="text" class="exp-workplace" value="${data.workplace || ''}" placeholder="Ví dụ: Bình Dương" />
+          </div>
+        </div>
+        <div class="grid" style="margin-top: 14px;">
+          <div class="field">
+            <label>Tên công ty</label>
+            <input type="text" class="exp-company" value="${data.company || ''}" placeholder="Nhập tên công ty" />
+          </div>
+          <div class="field">
+            <label>Mô tả công việc</label>
+            <input type="text" class="exp-job" value="${data.job || ''}" placeholder="Ví dụ: May áo, may quần, kỹ thuật chuyền" />
+          </div>
+        </div>
+      `;
+
+      wrapper.querySelector('.remove-exp-btn').addEventListener('click', () => {
+        wrapper.remove();
+        renumberExperienceItems();
+      });
+
+      experienceList.appendChild(wrapper);
+    }
+
+    function renumberExperienceItems() {
+      Array.from(experienceList.children).forEach((item, idx) => {
+        const title = item.querySelector('h3');
+        if (title) title.textContent = `Kinh nghiệm #${idx + 1}`;
+      });
+    }
+
+    function getSelectedMachines() {
+      const selected = Array.from(document.querySelectorAll('.machine-option:checked')).map(el => el.value);
+      const otherMachine = document.getElementById('OtherMachine').value.trim();
+      if (otherMachine) selected.push(`Máy khác: ${otherMachine}`);
+      return selected;
+    }
+
+    function getExperienceRows() {
+      return Array.from(document.querySelectorAll('.experience-item')).map(item => ({
+        fromYear: item.querySelector('.exp-from').value.trim(),
+        toYear: item.querySelector('.exp-to').value.trim(),
+        workplace: item.querySelector('.exp-workplace').value.trim(),
+        company: item.querySelector('.exp-company').value.trim(),
+        job: item.querySelector('.exp-job').value.trim()
+      })).filter(row => Object.values(row).some(Boolean));
+    }
+
+    function buildExperienceSummary(rows) {
+      if (!rows.length) return '';
+      return rows.map((row, idx) => {
+        return `${idx + 1}. ${row.fromYear || '?'} - ${row.toYear || '?'} | ${row.company || 'Chưa rõ công ty'} | ${row.workplace || 'Chưa rõ nơi làm việc'} | ${row.job || 'Chưa mô tả công việc'}`;
+      }).join('\n');
+    }
+
+    function validateForm() {
+      hideAlert();
+      const requiredFields = ['PositionApplied', 'FullName', 'BirthYear', 'Phone'];
+      for (const id of requiredFields) {
+        const el = document.getElementById(id);
+        if (!el.value.trim()) {
+          showAlert('error', 'Vui lòng nhập đầy đủ các trường bắt buộc.');
+          el.focus();
+          return false;
+        }
+      }
+
+      const phone = document.getElementById('Phone').value.trim();
+      if (!/^\d{9,11}$/.test(phone.replace(/\s+/g, ''))) {
+        showAlert('error', 'Số điện thoại chưa đúng định dạng. Vui lòng nhập 9 đến 11 chữ số.');
+        document.getElementById('Phone').focus();
+        return false;
+      }
+
+      const birthYear = Number(document.getElementById('BirthYear').value);
+      const currentYear = new Date().getFullYear();
+      if (birthYear < 1950 || birthYear > currentYear) {
+        showAlert('error', `Năm sinh cần nằm trong khoảng 1950 - ${currentYear}.`);
+        document.getElementById('BirthYear').focus();
+        return false;
+      }
+
+      return true;
+    }
+
+    function updateHiddenFields() {
+      document.getElementById('ApplyDate').value = todayString();
+      const machines = getSelectedMachines();
+      const experiences = getExperienceRows();
+      document.getElementById('MachinesCanUse').value = machines.join(', ');
+      document.getElementById('WorkExperienceSummary').value = buildExperienceSummary(experiences);
+    }
+
+    function getDraftData() {
+      return {
+        PositionApplied: document.getElementById('PositionApplied').value,
+        FullName: document.getElementById('FullName').value,
+        BirthYear: document.getElementById('BirthYear').value,
+        Phone: document.getElementById('Phone').value,
+        EducationLevel: document.getElementById('EducationLevel').value,
+        Address: document.getElementById('Address').value,
+        MaritalStatus: document.querySelector('input[name="MaritalStatus"]:checked')?.value || 'Độc thân',
+        HasChildUnder3: document.querySelector('input[name="HasChildUnder3"]:checked')?.value || 'Không',
+        ReferrerName: document.getElementById('ReferrerName').value,
+        ReferrerDepartment: document.getElementById('ReferrerDepartment').value,
+        OtherMachine: document.getElementById('OtherMachine').value,
+        Notes: document.getElementById('Notes').value,
+        selectedMachines: Array.from(document.querySelectorAll('.machine-option:checked')).map(el => el.value),
+        experiences: getExperienceRows()
+      };
+    }
+
+    function saveDraft() {
+      localStorage.setItem(CONFIG.DRAFT_KEY, JSON.stringify(getDraftData()));
+      showAlert('success', 'Đã lưu tạm dữ liệu trên máy này.');
+    }
+
+    function loadDraft() {
+      const raw = localStorage.getItem(CONFIG.DRAFT_KEY);
+      if (!raw) {
+        createExperienceItem();
+        document.getElementById('ApplyDate').value = todayString();
+        return;
+      }
+
+      try {
+        const draft = JSON.parse(raw);
+        document.getElementById('PositionApplied').value = draft.PositionApplied || '';
+        document.getElementById('FullName').value = draft.FullName || '';
+        document.getElementById('BirthYear').value = draft.BirthYear || '';
+        document.getElementById('Phone').value = draft.Phone || '';
+        document.getElementById('EducationLevel').value = draft.EducationLevel || '';
+        document.getElementById('Address').value = draft.Address || '';
+        document.getElementById('ReferrerName').value = draft.ReferrerName || '';
+        document.getElementById('ReferrerDepartment').value = draft.ReferrerDepartment || '';
+        document.getElementById('OtherMachine').value = draft.OtherMachine || '';
+        document.getElementById('Notes').value = draft.Notes || '';
+        document.getElementById('ApplyDate').value = todayString();
+
+        const marital = document.querySelector(`input[name="MaritalStatus"][value="${draft.MaritalStatus || 'Độc thân'}"]`);
+        if (marital) marital.checked = true;
+        const child = document.querySelector(`input[name="HasChildUnder3"][value="${draft.HasChildUnder3 || 'Không'}"]`);
+        if (child) child.checked = true;
+
+        const selectedMachines = new Set(draft.selectedMachines || []);
+        document.querySelectorAll('.machine-option').forEach(el => {
+          el.checked = selectedMachines.has(el.value);
+        });
+
+        experienceList.innerHTML = '';
+        if (Array.isArray(draft.experiences) && draft.experiences.length) {
+          draft.experiences.forEach(exp => createExperienceItem(exp));
+        } else {
+          createExperienceItem();
+        }
+      } catch (err) {
+        console.error(err);
+        createExperienceItem();
+      }
+    }
+
+    function clearDraft() {
+      localStorage.removeItem(CONFIG.DRAFT_KEY);
+      showAlert('success', 'Đã xóa bản lưu tạm trên máy này.');
+    }
+
+    document.getElementById('addExperienceBtn').addEventListener('click', () => createExperienceItem());
+    document.getElementById('saveDraftBtn').addEventListener('click', saveDraft);
+    document.getElementById('clearDraftBtn').addEventListener('click', clearDraft);
+
+    iframe.addEventListener('load', () => {
+      if (!waitingForSubmit) return;
+      waitingForSubmit = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Gửi hồ sơ';
+      localStorage.removeItem(CONFIG.DRAFT_KEY);
+      form.reset();
+      experienceList.innerHTML = '';
+      createExperienceItem();
+      document.getElementById('ApplyDate').value = todayString();
+      showAlert('success', 'Gửi hồ sơ thành công. Bộ phận tuyển dụng sẽ liên hệ với bạn trong thời gian sớm nhất.');
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+
+      if (!CONFIG.APPS_SCRIPT_URL || CONFIG.APPS_SCRIPT_URL.includes('PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE')) {
+        showAlert('error', 'Bạn chưa cấu hình URL Apps Script. Hãy thay CONFIG.APPS_SCRIPT_URL trong file index.html trước khi đưa lên GitHub.');
+        return;
+      }
+
+      updateHiddenFields();
+      form.action = CONFIG.APPS_SCRIPT_URL;
+      waitingForSubmit = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Đang gửi...';
+      form.submit();
+    });
+
+    loadDraft();
+  </script>
+</body>
+</html>
