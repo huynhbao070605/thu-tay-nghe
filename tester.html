@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đánh giá tay nghề ứng viên - Viking</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #0f766e;
+      --primary-hover: #115e59;
+      --secondary: #0ea5e9;
+      --success: #166534;
+      --success-bg: #ecfdf5;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --warn: #92400e;
+      --warn-bg: #fffbeb;
+      --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #0f766e, #0ea5e9);
+      color: white;
+      padding: 24px;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 { margin: 0 0 8px; font-size: 28px; }
+    .hero p { margin: 0; opacity: 0.95; font-size: 15px; }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin: 0 0 16px;
+      font-weight: 700;
+    }
+
+    .section-note {
+      margin: -8px 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field label,
+    .label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 15px;
+      background: white;
+      color: var(--text);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #e0f2fe; color: #075985; }
+    .btn-light { background: #f3f4f6; color: #374151; }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .actions-left,
+    .actions-right {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .alert {
+      display: none;
+      padding: 14px 16px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .alert.success {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success);
+      border: 1px solid #bbf7d0;
+    }
+
+    .alert.error {
+      display: block;
+      background: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+
+    .alert.warn {
+      display: block;
+      background: var(--warn-bg);
+      color: var(--warn);
+      border: 1px solid #fcd34d;
+    }
+
+    .candidate-preview {
+      display: none;
+      border: 1px solid #bae6fd;
+      background: #f0f9ff;
+      border-radius: 16px;
+      padding: 16px;
+      white-space: pre-wrap;
+    }
+
+    .candidate-preview.show { display: block; }
+
+    .summary-box {
+      border: 1px solid #d1fae5;
+      background: #f0fdf4;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .summary-rank {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 4px 0 10px;
+      color: #065f46;
+    }
+
+    .rule-box {
+      border: 1px dashed #cbd5e1;
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .section-block {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      margin-top: 16px;
+      background: #fcfcfd;
+    }
+
+    .section-block h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .check-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 14px;
+      margin-top: 12px;
+    }
+
+    .group-card {
+      border: 1px solid #dbeafe;
+      border-radius: 16px;
+      padding: 14px;
+      background: #f8fbff;
+      margin-top: 14px;
+    }
+
+    .group-card h4 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .group-badge {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      background: #dbeafe;
+      color: #1d4ed8;
+      border-radius: 999px;
+      padding: 4px 10px;
+      margin-bottom: 8px;
+    }
+
+    .choice {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      border: 1px solid #e5e7eb;
+      background: white;
+      padding: 12px 12px;
+      border-radius: 14px;
+    }
+
+    .choice input {
+      margin-top: 2px;
+      transform: scale(1.1);
+      flex: 0 0 auto;
+    }
+
+    .choice span {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    .mono { font-family: Consolas, Monaco, monospace; }
+
+    iframe[name="submit_iframe"] {
+      width: 0;
+      height: 0;
+      border: 0;
+      position: absolute;
+      left: -9999px;
+    }
+
+    @media (max-width: 900px) {
+      .grid,
+      .grid-3,
+      .check-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .hero h1 { font-size: 24px; }
+      .card { padding: 18px; }
+      .actions { flex-direction: column; align-items: stretch; }
+      .actions-left,
+      .actions-right { width: 100%; }
+      .actions-left .btn,
+      .actions-right .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <h1>Form đánh giá tay nghề</h1>
+      <p>Người test tìm đúng ứng viên, tick các tiêu chí theo phiếu bậc thợ, hệ thống sẽ tự tính bậc đề xuất.</p>
+    </div>
+
+    <div id="alertBox" class="alert"></div>
+
+    <div class="card">
+      <h2 class="section-title">1. Tìm hồ sơ ứng viên</h2>
+      <p class="section-note">Nhập CandidateID hoặc số điện thoại để lấy đúng hồ sơ đã nộp từ form ứng viên.</p>
+      <div class="grid">
+        <div class="field">
+          <label for="LookupCandidateID">CandidateID</label>
+          <input type="text" id="LookupCandidateID" placeholder="Ví dụ: UV20260421-001" />
+        </div>
+        <div class="field">
+          <label for="LookupPhone">Số điện thoại</label>
+          <input type="tel" id="LookupPhone" placeholder="Ví dụ: 0901234567" />
+        </div>
+      </div>
+      <div class="actions" style="margin-top:14px;">
+        <div class="actions-left">
+          <button type="button" class="btn btn-secondary" id="lookupBtn">Tìm hồ sơ</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">2. Thông tin ứng viên</h2>
+      <div id="candidatePreview" class="candidate-preview"></div>
+    </div>
+
+    <form id="testerForm" method="POST" target="submit_iframe" novalidate>
+      <input type="hidden" name="action" value="update_tester_checklist" />
+      <input type="hidden" name="CandidateID" id="CandidateID" />
+      <input type="hidden" name="Phone" id="Phone" />
+      <input type="hidden" name="EvaluationJson" id="EvaluationJson" />
+
+      <div class="card">
+        <h2 class="section-title">3. Thông tin buổi test</h2>
+        <div class="grid-3">
+          <div class="field">
+            <label for="TesterName">Người test <span style="color:#dc2626">*</span></label>
+            <input type="text" id="TesterName" name="TesterName" required placeholder="Nhập tên người test" />
+          </div>
+          <div class="field">
+            <label for="TestDate">Ngày test <span style="color:#dc2626">*</span></label>
+            <input type="date" id="TestDate" name="TestDate" required />
+          </div>
+          <div class="field">
+            <label for="EvaluationTrack">Nhóm đánh giá</label>
+            <select id="EvaluationTrack" name="EvaluationTrack">
+              <option value="general">Chung / Thợ may</option>
+              <option value="support">Lăn / dập / ủi / lập trình / bọ-nút</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">4. Quy tắc tính bậc đang áp dụng</h2>
+        <div class="rule-box">
+          <div><strong>Bậc 1:</strong> nhận thức cơ bản đạt ít nhất 6/7, phần máy cơ bản đạt, và ít nhất 1 nhóm thực hành đạt.</div>
+          <div><strong>Bậc 2:</strong> thỏa Bậc 1, phần nhận thức nâng cao đạt ít nhất 2/3, dùng thành thạo 3 loại máy, và đạt ít nhất 2 nhóm thực hành.</div>
+          <div><strong>Bậc 3:</strong> thỏa Bậc 2, biết phân tích lỗi và sửa, dùng thành thạo 4 loại máy, và đạt ít nhất 4 nhóm thực hành.</div>
+          <div><strong>Bậc 4:</strong> thỏa Bậc 3, dùng thành thạo tất cả máy may tại Viking + lăn + dập, và có ít nhất 1 nhóm thực hành nâng cao.</div>
+          <div class="hint">Quy tắc này bám theo phiếu bậc thợ để hệ thống tự tính rank. Nếu công ty có cách chấm nội bộ chi tiết hơn, chỉ cần sửa lại rule trong Code.gs.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">5. Tick tiêu chí đánh giá</h2>
+        <p class="section-note">Chỉ tick khi ứng viên đạt yêu cầu ở mục đó.</p>
+
+        <div id="checklistRoot"></div>
+      </div>
+
+      <div class="card">
+        <h2 class="section-title">6. Bậc đề xuất tự động</h2>
+        <div class="summary-box">
+          <div class="hint">Bậc đề xuất hiện tại</div>
+          <div class="summary-rank" id="rankPreview">Không đạt</div>
+          <div id="summaryPreview"></div>
+        </div>
+        <div class="field" style="margin-top:14px;">
+          <label for="TesterNotes">Ghi chú người test</label>
+          <textarea id="TesterNotes" name="TesterNotes" placeholder="Ví dụ: Ứng viên thao tác khá nhanh ở đường thẳng nhưng phần đường cong còn chậm."></textarea>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="actions-left">
+          <button type="button" class="btn btn-light" id="resetChecklistBtn">Bỏ chọn checklist</button>
+        </div>
+        <div class="actions-right">
+          <button type="submit" class="btn btn-primary" id="submitBtn">Lưu đánh giá và tính rank</button>
+        </div>
+      </div>
+    </form>
+
+    <iframe name="submit_iframe" id="submit_iframe"></iframe>
+  </div>
+
+  <script>
+    const CONFIG = {
+      APPS_SCRIPT_URL: 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE'
+    };
+
+    const AWARENESS_BASE = [
+      { key: 'bedboard', label: 'Thử Bedboard' },
+      { key: 'safety', label: 'Nắm vững nội quy an toàn vệ sinh lao động và tác dụng của dụng cụ bảo hộ' },
+      { key: 'detail_size_order', label: 'Phân biệt được chi tiết, tên size, tên đơn hàng' },
+      { key: 'measure_dimension', label: 'Đo độ rộng và dài của chi tiết' },
+      { key: 'stitch_quality', label: 'Nhận diện đường chỉ may đẹp / xấu' },
+      { key: 'read_process', label: 'Đọc tên công đoạn trong quy trình may và ghi số thứ tự công đoạn thực hiện' },
+      { key: 'fabric_grain', label: 'Phân biệt được mặt trái, mặt phải và canh sợi dọc / ngang của vải so với mẫu' }
+    ];
+
+    const AWARENESS_ADV = [
+      { key: 'prev_next_impact', label: 'Phân biệt được ảnh hưởng của công đoạn liền trước và sau trong 1 cụm công đoạn' },
+      { key: 'analyze_sewing_error', label: 'Biết phân tích nguyên nhân may lỗi' },
+      { key: 'fabric_elastic_pattern', label: 'Biết tính chất đàn hồi, ngược xuôi của chiều tuyết, hoa văn khi lắp ráp sản phẩm' }
+    ];
+
+    const AWARENESS_EXPERT = [
+      { key: 'self_error_fix', label: 'Biết phân tích nguyên nhân sản phẩm mình làm ra bị lỗi và biết cách sửa chữa' }
+    ];
+
+    const MACHINE_ITEMS = [
+      { key: 'machine_stitch_density', label: 'Chỉnh được mật độ mũi chỉ' },
+      { key: 'machine_thread_bobbin', label: 'Biết xỏ chỉ, tháo gắn thuyền suốt máy đang sử dụng' },
+      { key: 'machine_basic_sewing', label: 'Sử dụng thành thạo 1 trong các loại máy: 1K, 2K, Vắt sổ, Kansai / đánh bông, cuốn sườn' },
+      { key: 'machine_basic_support', label: 'Sử dụng thành thục 1 trong các loại máy: cắt tay, bàn ủi công nghiệp, dập, lăn, bọ + nút' },
+      { key: 'machine_three_types', label: 'Sử dụng thành thạo 03 loại máy' },
+      { key: 'machine_four_types', label: 'Sử dụng thành thạo 04 loại máy' },
+      { key: 'machine_all_types', label: 'Sử dụng thành thạo tất cả máy may tại Viking + lăn + dập' }
+    ];
+
+    const PRACTICE_GROUPS = [
+      {
+        key: 'group_assembly_basic',
+        title: 'Nhóm 1 - Rập / viền / lắp ráp cơ bản',
+        advanced: false,
+        items: [
+          { key: 'mica_pattern', label: 'May rập mica' },
+          { key: 'binding_guide', label: 'Bọc viền bằng cử' },
+          { key: 'assemble_straight', label: 'Lắp ráp đường thẳng' },
+          { key: 'assemble_curve', label: 'Lắp ráp đường cong' }
+        ]
+      },
+      {
+        key: 'group_topstitch',
+        title: 'Nhóm 2 - Diễu',
+        advanced: false,
+        items: [
+          { key: 'topstitch_straight', label: 'Diễu đường thẳng' },
+          { key: 'topstitch_curve', label: 'Diễu đường cong' }
+        ]
+      },
+      {
+        key: 'group_overlock',
+        title: 'Nhóm 3 - Vắt sổ',
+        advanced: false,
+        items: [
+          { key: 'overlock_straight', label: 'Vắt sổ đường thẳng' },
+          { key: 'overlock_curve', label: 'Vắt sổ đường cong' }
+        ]
+      },
+      {
+        key: 'group_batting',
+        title: 'Nhóm 4 - Đánh bông / Kansai',
+        advanced: false,
+        items: [
+          { key: 'batting_straight', label: 'Đánh bông đường thẳng' },
+          { key: 'batting_curve', label: 'Đánh bông đường cong' }
+        ]
+      },
+      {
+        key: 'group_garment_ops',
+        title: 'Nhóm 5 - Công đoạn may sản phẩm',
+        advanced: false,
+        items: [
+          { key: 'square_sharp_pocket', label: 'Đóng túi góc vuông, nhọn' },
+          { key: 'hem_one_layer', label: 'May lai sản phẩm 1 lớp' },
+          { key: 'front_placket', label: 'Tra nẹp che thân trước' },
+          { key: 'set_sleeve', label: 'Tra tay' },
+          { key: 'hem_two_layer', label: 'May lai quần / áo 2 lớp' },
+          { key: 'welt_zip_pocket', label: 'Mổ túi 1 cơi, 2 cơi, dây kéo' },
+          { key: 'round_patch_pocket', label: 'Đóng túi đắp góc tròn' }
+        ]
+      },
+      {
+        key: 'group_advanced_ops',
+        title: 'Nhóm 6 - Công đoạn kỹ thuật nâng cao',
+        advanced: true,
+        items: [
+          { key: 'balanced_folder', label: 'Cuốn sườn có canh đối xứng ít nhất 3 điểm' },
+          { key: 'paget_zip', label: 'May dây kéo paget, dây kéo ống, dây kéo thân trước' },
+          { key: 'rolled_waistband', label: 'Diễu lưng bẻ cuộn 1 mép' },
+          { key: 'double_paget', label: 'Đúp paget, dây kéo ống' },
+          { key: 'laser_pocket_film', label: 'Thực hiện được các công đoạn film túi laser phức tạp' }
+        ]
+      },
+      {
+        key: 'group_support_ops',
+        title: 'Nhóm 7 - Gấp xếp / đóng thùng / phụ trợ',
+        advanced: false,
+        items: [
+          { key: 'fold_finish', label: 'Gấp xếp hoàn chỉnh sản phẩm theo hướng dẫn' },
+          { key: 'packing_box', label: 'Phối thùng theo packing list, ghi nhận các thông tin liên quan' },
+          { key: 'helper_ops', label: 'Các công việc tay chân như gọt, lấy dấu, cắt chỉ, ủi mồi' },
+          { key: 'iron_finish', label: 'Ủi hoàn chỉnh sản phẩm theo hướng dẫn' },
+          { key: 'program_machine', label: 'Sử dụng máy lập trình' },
+          { key: 'bartack_button', label: 'Đóng bọ, nút tất cả các vị trí theo hướng dẫn' },
+          { key: 'high_press', label: 'Ép được đường thẳng / cong máy ép cao tầng' }
+        ]
+      },
+      {
+        key: 'group_products',
+        title: 'Nhóm 8 - Sản phẩm hoàn chỉnh / nâng cao',
+        advanced: true,
+        items: [
+          { key: 'roll_all_products', label: 'Lăn được tất cả các sản phẩm của Viking' },
+          { key: 'press_pvc_pu', label: 'Ép hoàn chỉnh sản phẩm PVC / PU' },
+          { key: 'double_full_product', label: 'Đúp áo / quần hoàn chỉnh sản phẩm' },
+          { key: 'armhole_binding', label: 'May cuốn vòng nách có canh đối xứng' },
+          { key: 'basic_products', label: 'Biết cách lắp ráp các sản phẩm cơ bản như đồ bác sĩ, quần tây, áo sơ mi' },
+          { key: 'advanced_products_train', label: 'Biết cách lắp ráp các sản phẩm áo jacket / quần lăn 2 lớp và hướng dẫn người khác thực hiện' }
+        ]
+      }
+    ];
+
+    const alertBox = document.getElementById('alertBox');
+    const preview = document.getElementById('candidatePreview');
+    const lookupBtn = document.getElementById('lookupBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const testerForm = document.getElementById('testerForm');
+    const iframe = document.getElementById('submit_iframe');
+    const checklistRoot = document.getElementById('checklistRoot');
+    const rankPreview = document.getElementById('rankPreview');
+    const summaryPreview = document.getElementById('summaryPreview');
+    let waitingForSubmit = false;
+
+    function showAlert(type, message) {
+      alertBox.className = 'alert ' + type;
+      alertBox.textContent = message;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function hideAlert() {
+      alertBox.className = 'alert';
+      alertBox.textContent = '';
+    }
+
+    function todayString() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function createCheckbox(item) {
+      return `
+        <label class="choice">
+          <input type="checkbox" class="criteria-check" data-key="${item.key}" />
+          <span>${item.label}</span>
+        </label>
+      `;
+    }
+
+    function renderChecklist() {
+      checklistRoot.innerHTML = `
+        <div class="section-block">
+          <h3>I. Năng lực nhận thức</h3>
+          <div class="hint">Bậc 1 cần đạt ít nhất 6/7 mục cơ bản. Bậc 2 cần thêm ít nhất 2/3 mục nâng cao. Bậc 3 cần thêm mục phân tích lỗi và sửa chữa.</div>
+          <div class="group-card">
+            <div class="group-badge">Nhận thức cơ bản</div>
+            <div class="check-grid">${AWARENESS_BASE.map(createCheckbox).join('')}</div>
+          </div>
+          <div class="group-card">
+            <div class="group-badge">Nhận thức nâng cao</div>
+            <div class="check-grid">${AWARENESS_ADV.map(createCheckbox).join('')}</div>
+          </div>
+          <div class="group-card">
+            <div class="group-badge">Nhận thức bậc cao</div>
+            <div class="check-grid">${AWARENESS_EXPERT.map(createCheckbox).join('')}</div>
+          </div>
+        </div>
+
+        <div class="section-block">
+          <h3>II. Sử dụng máy</h3>
+          <div class="hint">Tick mục nào ứng viên làm được ở mức đạt yêu cầu.</div>
+          <div class="check-grid">${MACHINE_ITEMS.map(createCheckbox).join('')}</div>
+        </div>
+
+        <div class="section-block">
+          <h3>III. Năng lực thực hành</h3>
+          <div class="hint">Mỗi nhóm công đoạn tính là đạt khi có ít nhất 1 mục trong nhóm được tick. Các nhóm có nhãn "Nâng cao" được dùng thêm cho Bậc 4.</div>
+          ${PRACTICE_GROUPS.map(group => `
+            <div class="group-card" data-group="${group.key}">
+              <div class="group-badge">${group.advanced ? 'Nhóm thực hành nâng cao' : 'Nhóm thực hành'}</div>
+              <h4>${group.title}</h4>
+              <div class="check-grid">${group.items.map(createCheckbox).join('')}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+
+      checklistRoot.querySelectorAll('.criteria-check').forEach(el => {
+        el.addEventListener('change', refreshSummary);
+      });
+    }
+
+    function checked(key) {
+      const el = document.querySelector(`.criteria-check[data-key="${key}"]`);
+      return !!(el && el.checked);
+    }
+
+    function countChecked(list) {
+      return list.reduce((sum, item) => sum + (checked(item.key) ? 1 : 0), 0);
+    }
+
+    function getPracticeGroupsPassed() {
+      return PRACTICE_GROUPS.map(group => {
+        const passed = group.items.some(item => checked(item.key));
+        return { key: group.key, title: group.title, advanced: !!group.advanced, passed };
+      });
+    }
+
+    function calculateRankClient() {
+      const awarenessBaseCount = countChecked(AWARENESS_BASE);
+      const awarenessAdvCount = countChecked(AWARENESS_ADV);
+      const awarenessExpert = checked('self_error_fix');
+
+      const machineBase = (checked('machine_stitch_density') && checked('machine_thread_bobbin') && checked('machine_basic_sewing')) || checked('machine_basic_support');
+      const machineThree = checked('machine_three_types');
+      const machineFour = checked('machine_four_types');
+      const machineAll = checked('machine_all_types');
+
+      const groups = getPracticeGroupsPassed();
+      const practiceGroupCount = groups.filter(g => g.passed).length;
+      const advancedGroupCount = groups.filter(g => g.passed && g.advanced).length;
+
+      let rank = 'Không đạt';
+      const met = { b1: false, b2: false, b3: false, b4: false };
+
+      if (awarenessBaseCount >= 6 && machineBase && practiceGroupCount >= 1) {
+        met.b1 = true;
+        rank = 'Bậc 1';
+      }
+      if (met.b1 && awarenessAdvCount >= 2 && machineThree && practiceGroupCount >= 2) {
+        met.b2 = true;
+        rank = 'Bậc 2';
+      }
+      if (met.b2 && awarenessExpert && machineFour && practiceGroupCount >= 4) {
+        met.b3 = true;
+        rank = 'Bậc 3';
+      }
+      if (met.b3 && machineAll && advancedGroupCount >= 1) {
+        met.b4 = true;
+        rank = 'Bậc 4';
+      }
+
+      return {
+        rank,
+        counts: {
+          awarenessBaseCount,
+          awarenessAdvCount,
+          awarenessExpert,
+          machineBase,
+          machineThree,
+          machineFour,
+          machineAll,
+          practiceGroupCount,
+          advancedGroupCount
+        },
+        groups,
+        met
+      };
+    }
+
+    function buildSummaryText(result) {
+      const lines = [];
+      lines.push(`Nhận thức cơ bản: ${result.counts.awarenessBaseCount}/7`);
+      lines.push(`Nhận thức nâng cao: ${result.counts.awarenessAdvCount}/3`);
+      lines.push(`Biết phân tích lỗi và sửa: ${result.counts.awarenessExpert ? 'Có' : 'Chưa'}`);
+      lines.push(`Máy cơ bản: ${result.counts.machineBase ? 'Đạt' : 'Chưa đạt'}`);
+      lines.push(`03 loại máy: ${result.counts.machineThree ? 'Đạt' : 'Chưa'}`);
+      lines.push(`04 loại máy: ${result.counts.machineFour ? 'Đạt' : 'Chưa'}`);
+      lines.push(`Tất cả máy Viking + lăn + dập: ${result.counts.machineAll ? 'Đạt' : 'Chưa'}`);
+      lines.push(`Nhóm thực hành đạt: ${result.counts.practiceGroupCount}`);
+      lines.push(`Nhóm thực hành nâng cao đạt: ${result.counts.advancedGroupCount}`);
+      return lines.join('\n');
+    }
+
+    function refreshSummary() {
+      const result = calculateRankClient();
+      rankPreview.textContent = result.rank;
+      summaryPreview.innerHTML = `
+        <div><strong>Tổng quan:</strong></div>
+        <div>${escapeHtml(buildSummaryText(result)).replace(/\n/g, '<br>')}</div>
+        <div class="hint" style="margin-top:10px;">Nhóm thực hành đạt: ${result.groups.filter(g => g.passed).map(g => g.title).join('; ') || 'Chưa có'}</div>
+      `;
+    }
+
+    function buildEvaluationPayload() {
+      const selectedCriteria = {};
+      document.querySelectorAll('.criteria-check').forEach(el => {
+        selectedCriteria[el.dataset.key] = !!el.checked;
+      });
+      const result = calculateRankClient();
+      return {
+        evaluationTrack: document.getElementById('EvaluationTrack').value,
+        selectedCriteria,
+        calculatedPreview: result,
+        testerNotes: document.getElementById('TesterNotes').value.trim()
+      };
+    }
+
+    function renderCandidate(candidate) {
+      const html = `
+        <div><strong>CandidateID:</strong> <span class="mono">${escapeHtml(candidate.CandidateID)}</span></div>
+        <div><strong>Họ tên:</strong> ${escapeHtml(candidate.FullName)}</div>
+        <div><strong>Vị trí ứng tuyển:</strong> ${escapeHtml(candidate.PositionApplied)}</div>
+        <div><strong>Điện thoại:</strong> ${escapeHtml(candidate.Phone)}</div>
+        <div><strong>Năm sinh:</strong> ${escapeHtml(candidate.BirthYear)}</div>
+        <div><strong>Địa chỉ:</strong> ${escapeHtml(candidate.Address)}</div>
+        <div><strong>Máy có thể sử dụng:</strong> ${escapeHtml(candidate.MachinesCanUse)}</div>
+        <div><strong>Kinh nghiệm:</strong><br>${escapeHtml(candidate.WorkExperienceSummary).replace(/\n/g, '<br>')}</div>
+        <div><strong>Đánh giá hiện tại:</strong> ${escapeHtml(candidate.SuggestedRank || 'Chưa có')}</div>
+        <div><strong>Tóm tắt hiện tại:</strong><br>${escapeHtml(candidate.SkillSummary || 'Chưa có').replace(/\n/g, '<br>')}</div>
+      `;
+      preview.innerHTML = html;
+      preview.classList.add('show');
+      document.getElementById('CandidateID').value = candidate.CandidateID || '';
+      document.getElementById('Phone').value = candidate.Phone || '';
+    }
+
+    function handleCandidateLookup(response) {
+      if (!response || !response.ok) {
+        preview.innerHTML = '';
+        preview.classList.remove('show');
+        showAlert('error', response && response.message ? response.message : 'Không tìm thấy ứng viên.');
+        return;
+      }
+      hideAlert();
+      renderCandidate(response.candidate);
+      showAlert('success', 'Đã tìm thấy hồ sơ ứng viên. Bạn có thể bắt đầu tick checklist bên dưới.');
+    }
+
+    window.handleCandidateLookup = handleCandidateLookup;
+
+    function lookupCandidate() {
+      hideAlert();
+      const candidateId = document.getElementById('LookupCandidateID').value.trim();
+      const phone = document.getElementById('LookupPhone').value.trim();
+
+      if (!candidateId && !phone) {
+        showAlert('error', 'Vui lòng nhập CandidateID hoặc số điện thoại để tìm hồ sơ.');
+        return;
+      }
+
+      if (!CONFIG.APPS_SCRIPT_URL || CONFIG.APPS_SCRIPT_URL.includes('PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE')) {
+        showAlert('error', 'Bạn chưa cấu hình URL Apps Script trong tester.html.');
+        return;
+      }
+
+      const oldScript = document.getElementById('lookupScript');
+      if (oldScript) oldScript.remove();
+
+      const script = document.createElement('script');
+      script.id = 'lookupScript';
+      const url = new URL(CONFIG.APPS_SCRIPT_URL);
+      url.searchParams.set('action', 'find_candidate');
+      if (candidateId) url.searchParams.set('candidateId', candidateId);
+      if (phone) url.searchParams.set('phone', phone);
+      url.searchParams.set('callback', 'handleCandidateLookup');
+      url.searchParams.set('_', Date.now());
+      script.src = url.toString();
+      script.onerror = () => showAlert('error', 'Không thể tải dữ liệu ứng viên từ Apps Script. Hãy kiểm tra lại URL web app và quyền truy cập.');
+      document.body.appendChild(script);
+    }
+
+    function validateForm() {
+      if (!document.getElementById('CandidateID').value.trim() && !document.getElementById('Phone').value.trim()) {
+        showAlert('error', 'Bạn cần tìm hồ sơ ứng viên trước khi lưu đánh giá.');
+        return false;
+      }
+      const testerName = document.getElementById('TesterName').value.trim();
+      const testDate = document.getElementById('TestDate').value.trim();
+      if (!testerName || !testDate) {
+        showAlert('error', 'Vui lòng nhập đầy đủ Người test và Ngày test.');
+        return false;
+      }
+      const result = calculateRankClient();
+      if (result.rank === 'Không đạt' && result.counts.practiceGroupCount === 0 && result.counts.awarenessBaseCount === 0) {
+        showAlert('error', 'Bạn chưa tick tiêu chí nào trong checklist.');
+        return false;
+      }
+      return true;
+    }
+
+    function clearChecklist() {
+      document.querySelectorAll('.criteria-check').forEach(el => {
+        el.checked = false;
+      });
+      refreshSummary();
+    }
+
+    document.getElementById('resetChecklistBtn').addEventListener('click', clearChecklist);
+    lookupBtn.addEventListener('click', lookupCandidate);
+
+    iframe.addEventListener('load', () => {
+      if (!waitingForSubmit) return;
+      waitingForSubmit = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Lưu đánh giá và tính rank';
+      showAlert('success', 'Đã gửi đánh giá. Hãy kiểm tra lại Google Sheet để xác nhận dữ liệu đã được cập nhật.');
+    });
+
+    testerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideAlert();
+      if (!validateForm()) return;
+
+      if (!CONFIG.APPS_SCRIPT_URL || CONFIG.APPS_SCRIPT_URL.includes('PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE')) {
+        showAlert('error', 'Bạn chưa cấu hình URL Apps Script trong tester.html.');
+        return;
+      }
+
+      document.getElementById('EvaluationJson').value = JSON.stringify(buildEvaluationPayload());
+      testerForm.action = CONFIG.APPS_SCRIPT_URL;
+      waitingForSubmit = true;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Đang lưu...';
+      testerForm.submit();
+    });
+
+    renderChecklist();
+    refreshSummary();
+    document.getElementById('TestDate').value = todayString();
+  </script>
+</body>
+</html>
